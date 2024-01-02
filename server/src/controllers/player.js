@@ -21,24 +21,23 @@ export const signUp = async (req, res) => {
         'Password must be between 8 and 30 characters'
       );
 
-    const isExist = await PlayerModel.findOne({ username }).exec();
+    const isExist = await PlayerModel.findOne({ username });
 
     if (isExist)
       throw createHttpError(409, 'Player with this username already exists');
 
     const passwordHashed = await bcrypt.hash(password, 10);
 
-    const newUser = await PlayerModel.create({
+    await PlayerModel.create({
       username,
       password: passwordHashed,
     });
 
+    const newUser = await PlayerModel.findOne({ username }).select('-password');
+
     res.send({
       message: 'Signed up successfully',
-      player: {
-        id: newUser._id,
-        username: newUser.username,
-      },
+      player: newUser,
     });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
@@ -64,12 +63,93 @@ export const login = async (req, res) => {
         'Invalid password. Check your data and try again'
       );
 
+    const userObject = user.toObject();
+    delete userObject.password;
+
     res.send({
       message: 'Logged in successfully',
-      player: {
-        id: user._id,
-        username: username,
-      },
+      player: userObject,
+    });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+    const user = await PlayerModel.findById(id);
+
+    if (!user) throw createHttpError(400, 'User not found');
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if (checkPassword)
+      throw createHttpError(
+        400,
+        'Please choose a different password than your current one'
+      );
+
+    const passwordHashed = await bcrypt.hash(password, 10);
+
+    await PlayerModel.findByIdAndUpdate(
+      id,
+      { password: passwordHashed },
+      { new: true }
+    );
+
+    res.send({
+      message: 'Password changed successfully',
+    });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const changeUsername = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username } = req.body;
+
+    const user = await PlayerModel.findById(id);
+    const isExist = await PlayerModel.findOne({ username });
+
+    if (user.username === username)
+      throw createHttpError(
+        400,
+        'Please choose a different username than your current one'
+      );
+
+    if (isExist) throw createHttpError(400, 'This username is already in use');
+
+    const updatedUser = await PlayerModel.findByIdAndUpdate(
+      id,
+      { username },
+      { new: true }
+    ).select('-password');
+
+    res.send({
+      message: 'Username changed successfully',
+      player: updatedUser,
+    });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const deleteAccount = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await PlayerModel.findById(id);
+
+    if (!user) throw createHttpError(400, 'User not found');
+
+    await PlayerModel.findByIdAndDelete(id);
+
+    res.send({
+      message: 'User deleted successfully',
     });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
