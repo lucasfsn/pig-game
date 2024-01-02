@@ -15,6 +15,12 @@ export const signUp = async (req, res) => {
         'Username must be between 3 and 20 characters'
       );
 
+    if (password.length < 8 || password.length > 30)
+      throw createHttpError(
+        400,
+        'Password must be between 8 and 30 characters'
+      );
+
     const isExist = await PlayerModel.findOne({ username }).exec();
 
     if (isExist)
@@ -61,8 +67,8 @@ export const login = async (req, res) => {
     res.send({
       message: 'Logged in successfully',
       player: {
-        id: newUser._id,
-        username: newUser.username,
+        id: user._id,
+        username: username,
       },
     });
   } catch (err) {
