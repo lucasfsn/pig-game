@@ -1,10 +1,13 @@
 import { useFormik } from 'formik';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import Button from '../ui/Button.jsx';
 import { useAuth } from './useAuth.js';
+import { getLoading } from './userSlice.js';
 
 function SignUpForm() {
   const { signUpUser } = useAuth();
+  const isLoading = useSelector(getLoading);
 
   const formik = useFormik({
     initialValues: {
@@ -31,7 +34,7 @@ function SignUpForm() {
         <input
           type="text"
           placeholder="Username"
-          className={`rounded-lg px-3 py-1 focus:outline-none text-2xl ${
+          className={`rounded-lg px-3 py-2 focus:outline-none text-2xl ${
             formik.touched.username && formik.errors.username
               ? 'border-red-700 border'
               : ''
@@ -44,7 +47,7 @@ function SignUpForm() {
         <input
           type="password"
           placeholder="Password"
-          className={`rounded-lg px-3 py-1 focus:outline-none text-2xl ${
+          className={`rounded-lg px-3 py-2 focus:outline-none text-2xl ${
             formik.touched.password && formik.errors.password
               ? 'border-red-700 border'
               : ''
@@ -55,7 +58,7 @@ function SignUpForm() {
           <p className="text-lg text-red-700">{formik.errors.password}</p>
         ) : null}
       </div>
-      <Button>Sign Up</Button>
+      <Button disabled={isLoading}>Sign Up</Button>
     </form>
   );
 }

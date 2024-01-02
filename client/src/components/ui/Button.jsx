@@ -1,12 +1,16 @@
 function Button({
+  disabled,
   bgColor = 'bg-gray-600',
   textColor = 'text-white',
+  onClick = () => {},
   children,
 }) {
   return (
     <button
       type="submit"
-      className={`font-semibold px-6 py-1.5 w-fit mx-auto rounded-full text-2xl hover:bg-gray-700 transition-all ${bgColor} ${textColor}`}
+      className={`font-semibold px-6 py-1.5 w-fit mx-auto rounded-full text-2xl hover:bg-gray-700 transition-all disabled:cursor-not-allowed ${bgColor} ${textColor}`}
+      disabled={disabled}
+      onClick={onClick}
     >
       {children}
     </button>

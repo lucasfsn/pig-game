@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loginApi, signupApi } from './apiAuth.js';
-import { error, fetching, login } from './userSlice.js';
+import { error, fetching, login, logout } from './userSlice.js';
 
 export function useAuth() {
   const navigate = useNavigate();
@@ -39,7 +39,6 @@ export function useAuth() {
 
       dispatch(login(player));
 
-      console.log(player);
       toast.success(message);
 
       navigate('/', { replace: true });
@@ -50,5 +49,15 @@ export function useAuth() {
     }
   }
 
-  return { loginUser, signUpUser };
+  async function logoutUser() {
+    Cookies.remove('user');
+
+    dispatch(logout());
+
+    toast.success('Logged out successfully');
+
+    navigate('/login');
+  }
+
+  return { loginUser, signUpUser, logoutUser };
 }

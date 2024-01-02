@@ -1,9 +1,17 @@
+import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+import { getLoading } from '../user/userSlice.js';
+import Header from './Header.jsx';
+import Spinner from './Spinner.jsx';
 
 function AppLayout() {
+  const isLoading = useSelector(getLoading);
+
   return (
-    <div className="flex min-h-screen flex-col">
-      <main className="bg-secondary mt-[55px] flex flex-grow">
+    <div className="flex min-h-screen flex-col bg-gray-950">
+      <Header />
+      <main className="w-full text-white">
+        {isLoading ? <Spinner /> : null}
         <Outlet />
       </main>
     </div>

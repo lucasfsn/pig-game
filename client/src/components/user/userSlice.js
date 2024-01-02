@@ -27,10 +27,30 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = true;
     },
+    usernameChange(state, action) {
+      state.user.username = action.payload;
+      state.isLoading = false;
+      state.error = false;
+    },
+    passwordChange(state) {
+      state.isLoading = false;
+      state.error = false;
+    },
+    accountDelete() {
+      return initialState;
+    },
   },
 });
 
-export const { login, logout, fetching, error } = userSlice.actions;
+export const {
+  login,
+  logout,
+  fetching,
+  error,
+  usernameChange,
+  passwordChange,
+  accountDelete,
+} = userSlice.actions;
 
 export default userSlice.reducer;
 
