@@ -36,7 +36,7 @@ function PlayerProfile() {
   if (!profile) return <Spinner />;
 
   return (
-    <div className="flex w-full justify-center items-center p-10">
+    <div className="flex w-full h-full justify-center p-10">
       <div className="flex flex-col p-8 bg-gray-900 rounded-lg shadow-lg gap-2 text-4xl">
         <p>
           Username: <span className="text-gray-400">{profile.username}</span>

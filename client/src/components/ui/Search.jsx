@@ -25,14 +25,14 @@ function Search() {
   return (
     <div className="relative">
       <input
-        className="w-28 rounded-full bg-white px-4 py-2 text-sm transition-all duration-300 placeholder:text-stone-400 focus:outline-none focus:ring focus:ring-sky-300 focus:ring-opacity-50 sm:w-64 sm:focus:w-72"
+        className="w-40 rounded-full bg-white px-4 py-2 text-lg transition-all duration-300 placeholder:text-stone-400 focus:outline-none focus:ring focus:ring-sky-300 focus:ring-opacity-50 sm:w-64 sm:focus:w-72"
         placeholder="Search"
         value={query}
         onChange={handleSearch}
       />
       {results.length > 0 ? (
         <div
-          className="absolute bg-gray-800 rounded-lg w-full mt-1 p-1 flex flex-col gap-1 overflow-y-scroll max-h-96"
+          className="absolute bg-gray-800 rounded-lg min-w-full mt-1 p-1 flex flex-col gap-1 overflow-y-scroll max-h-96"
           ref={ref}
         >
           {results.map(result => (

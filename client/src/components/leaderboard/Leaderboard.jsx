@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Spinner from '../ui/Spinner.jsx';
 import { getLeaderboard } from './apiLeaderboard.js';
 
@@ -36,22 +36,22 @@ function Leaderboard() {
     <div className="overflow-scroll p-5 md:p-10">
       <table className="w-full border-collapse table-fixed text-center">
         <thead className="h-[75px]">
-          <tr className="text-gray-300">
+          <tr className="text-pink-700">
             <th
               onClick={() => handleSort('username')}
-              className="cursor-pointer hover:bg-gray-600 transition-colors duration-400 rounded-lg bg-gray-700"
+              className="cursor-pointer hover:bg-gray-600 transition-colors duration-400 rounded-l-lg bg-gray-800"
             >
               Username
             </th>
             <th
               onClick={() => handleSort('gamesPlayed')}
-              className="cursor-pointer hover:bg-gray-600 transition-colors duration-400 rounded-lg bg-gray-700"
+              className="cursor-pointer hover:bg-gray-600 transition-colors duration-400 bg-gray-800"
             >
               Games Played
             </th>
             <th
               onClick={() => handleSort('gamesWon')}
-              className="cursor-pointer hover:bg-gray-600 transition-colors duration-400 rounded-lg bg-gray-700"
+              className="cursor-pointer hover:bg-gray-600 transition-colors duration-400 rounded-r-lg bg-gray-800"
             >
               Games Won
             </th>
@@ -60,7 +60,11 @@ function Leaderboard() {
         <tbody>
           {players.map(player => (
             <tr key={player._id} className="border-b border-gray-600 h-[50px]">
-              <td>{player.username}</td>
+              <td className="text-pink-500">
+                <Link to={`/profile/${player.username}`}>
+                  {player.username}
+                </Link>
+              </td>
               <td>{player.gamesPlayed}</td>
               <td>{player.gamesWon}</td>
             </tr>

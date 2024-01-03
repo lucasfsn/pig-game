@@ -5,6 +5,7 @@ import Leaderboard from './components/leaderboard/Leaderboard.jsx';
 import PlayerProfile from './components/profile/PlayerProfile.jsx';
 import Settings from './components/settings/Settings.jsx';
 import AppLayout from './components/ui/AppLayout.jsx';
+import PageNotFound from './components/ui/PageNotFound.jsx';
 import ProtectedRoute from './components/ui/ProtectedRoute.jsx';
 import Login from './components/user/Login.jsx';
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/profile/:username?" element={<PlayerProfile />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
           <Route path="/login" element={<Login />} />
         </Routes>

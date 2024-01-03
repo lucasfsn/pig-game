@@ -9,31 +9,33 @@ function Header() {
 
   return (
     <div className="flex justify-between py-3 px-4 bg-gray-900 items-center shadow-md">
-      <Link to="/">
-        <img src="../../logo.png" alt="Pig Game" className="w-[50px]" />
-      </Link>
-      <Search />
+      <div className="flex items-center gap-4">
+        <Link to="/">
+          <img src="../../logo.png" alt="Pig Game" className="w-[50px]" />
+        </Link>
+        <Search />
+      </div>
       <div className="flex gap-2">
         <Link
           to="/leaderboard"
-          className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2"
+          className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2 hover:bg-gray-100 transition-colors duration-300"
         >
           <MdLeaderboard />
         </Link>
         <Link
           to="/profile"
-          className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2"
+          className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2 hover:bg-gray-100 transition-colors duration-300"
         >
           <IoPerson />
         </Link>
         <Link
           to="/settings"
-          className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2"
+          className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2 hover:bg-gray-100 transition-colors duration-300"
         >
           <IoSettingsSharp />
         </Link>
         <button
-          className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2"
+          className="text-gray-500 text-3xl rounded-full bg-pink-600 w-auto p-2 hover:bg-pink-700 transition-colors duration-300"
           onClick={logoutUser}
         >
           <MdLogout />

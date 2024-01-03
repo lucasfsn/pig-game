@@ -10,7 +10,7 @@ function AppLayout() {
   return (
     <div className="flex min-h-screen flex-col bg-gray-950">
       <Header />
-      <main className="w-full text-white flex flex-grow">
+      <main className="w-full text-white h-full flex-grow">
         {isLoading ? <Spinner /> : null}
         <Outlet />
       </main>
