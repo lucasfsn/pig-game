@@ -58,8 +58,8 @@ function PlayerProfile() {
   if (!profile) return <Spinner />;
 
   return (
-    <div className="flex w-full h-full justify-center p-10">
-      <div className="flex flex-col p-8 bg-gray-900 rounded-lg shadow-lg gap-2 text-4xl">
+    <div className="flex w-full p-10">
+      <div className="flex flex-col p-8 bg-gray-900 rounded-lg shadow-lg gap-2 text-4xl w-full">
         <p>
           Username: <span className="text-blue-400">{profile.username}</span>
         </p>

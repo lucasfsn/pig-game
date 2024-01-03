@@ -1,5 +1,7 @@
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:3001');
+const apiUrl = process.env.REACT_APP_BACKEND_API_URL;
+
+const socket = io.connect(apiUrl);
 
 export default socket;

@@ -8,7 +8,7 @@ function Header() {
   const { logoutUser } = useAuth();
 
   return (
-    <div className="flex justify-between py-3 px-4 bg-gray-900 items-center shadow-md">
+    <div className="flex justify-between py-3 px-4 bg-gray-900 items-center shadow-md h-[60px]">
       <div className="flex items-center gap-4">
         <Link to="/">
           <img src="../../logo.png" alt="Pig Game" className="w-[50px]" />

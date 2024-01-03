@@ -1,19 +1,25 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useGame } from '../game/useGame.js';
 import Button from '../ui/Button.jsx';
 import { getUser } from '../user/userSlice.js';
 
 function Home() {
-  const user = useSelector(getUser);
   const [gameId, setGameId] = useState('');
+
+  const user = useSelector(getUser);
+
+  const { createGame } = useGame();
 
   function handleJoinGame() {}
 
-  function handleCreateGame() {}
+  async function handleCreateGame() {
+    await createGame(user._id);
+  }
 
   return (
-    <div className="flex flex-col w-full gap-10 p-10 h-full">
+    <div className="flex flex-col w-full gap-10 p-10 h-[calc(100dvh-60px)] justify-center">
       <div className="text-center p-5">
         <h2 className="text-4xl font-bold mb-4">
           Welcome <span className="text-gray-400">{user.username}</span> in{' '}
