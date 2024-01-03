@@ -49,7 +49,7 @@ export function useAuth() {
     }
   }
 
-  async function logoutUser(type = 'logout') {
+  async function logoutUser(type) {
     Cookies.remove('user');
 
     dispatch(logout());
@@ -60,7 +60,7 @@ export function useAuth() {
         icon: '⛔',
       });
 
-    navigate('/login');
+    navigate('/login', { replace: true });
   }
 
   return { loginUser, signUpUser, logoutUser };

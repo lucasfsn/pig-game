@@ -36,7 +36,7 @@ function Header() {
         </Link>
         <button
           className="text-gray-500 text-3xl rounded-full bg-pink-600 w-auto p-2 hover:bg-pink-700 transition-colors duration-300"
-          onClick={logoutUser}
+          onClick={() => logoutUser('logout')}
         >
           <MdLogout />
         </button>
