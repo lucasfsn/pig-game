@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useOutsideClick } from '../../hooks/useOutsideclick.js';
-import { search } from '../profile/apiProfile.js';
+import { searchApi } from '../profile/apiProfile.js';
 
 function Search() {
   const [results, setResults] = useState([]);
@@ -15,7 +15,7 @@ function Search() {
     if (!e.target.value) return setResults([]);
 
     try {
-      const data = await search(e.target.value);
+      const data = await searchApi(e.target.value);
       setResults(data);
     } catch (err) {
       console.error(err);

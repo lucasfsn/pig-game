@@ -23,3 +23,11 @@ export async function deleteAccountApi(id) {
 
   return data;
 }
+
+export async function changeRoleApi(username, role) {
+  const { data } = await axios.put(`${apiUrl}/change-role/${username}`, {
+    role,
+  });
+
+  return data;
+}

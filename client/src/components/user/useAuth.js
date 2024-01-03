@@ -49,12 +49,16 @@ export function useAuth() {
     }
   }
 
-  async function logoutUser() {
+  async function logoutUser(type = 'logout') {
     Cookies.remove('user');
 
     dispatch(logout());
 
-    toast.success('Logged out successfully');
+    if (type === 'logout') toast.success('Logged out successfully');
+    else if (type === 'ban')
+      toast("You've been banned", {
+        icon: '⛔',
+      });
 
     navigate('/login');
   }

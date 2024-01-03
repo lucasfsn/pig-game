@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import Button from '../ui/Button.jsx';
 import { getLoading, getUser } from '../user/userSlice.js';
+import ChangeRole from './ChangeRole.jsx';
 import { useSettings } from './useSettings.js';
 
 function Settings() {
@@ -29,15 +30,17 @@ function Settings() {
     onSubmit: async values => {
       if (values.username) await changeUsername(values.username, user._id);
       if (values.password) await changePassword(values.password, user._id);
+
+      formik.handleReset();
     },
   });
 
   return (
-    <div className="w-full flex flex-col gap-5 justify-center items-center px-2 py-10">
+    <div className="w-full flex flex-col gap-3 justify-center items-center px-2 py-10">
       <h1 className="font-semibold text-4xl">Settings</h1>
       <form
         onSubmit={formik.handleSubmit}
-        className="flex flex-col gap-4 border-b border-gray-950 pb-4 w-[275px]"
+        className="flex flex-col gap-4 border-b border-gray-950 w-[275px]"
       >
         <div className="flex flex-col gap-2.5 w-full">
           <div
@@ -104,6 +107,7 @@ function Settings() {
           </Button>
         </div>
       )}
+      <ChangeRole />
     </div>
   );
 }

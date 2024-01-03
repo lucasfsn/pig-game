@@ -11,6 +11,7 @@ import {
 } from '../user/userSlice.js';
 import {
   changePasswordApi,
+  changeRoleApi,
   changeUsernameApi,
   deleteAccountApi,
 } from './apiSettings.js';
@@ -74,5 +75,15 @@ export function useSettings() {
     }
   }
 
-  return { changeUsername, changePassword, deleteAccount };
+  async function changeRole(username, role) {
+    try {
+      const { message } = await changeRoleApi(username, role);
+
+      toast.success(message);
+    } catch (err) {
+      toast.error(err.response.data.message || 'An unexpected error occurred');
+    }
+  }
+
+  return { changeUsername, changePassword, deleteAccount, changeRole };
 }

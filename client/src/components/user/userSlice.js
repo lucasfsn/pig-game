@@ -39,6 +39,11 @@ const userSlice = createSlice({
     accountDelete() {
       return initialState;
     },
+    changeBanStatus(state, action) {
+      state.user.banned = action.payload;
+      state.isLoading = false;
+      state.error = false;
+    },
   },
 });
 
@@ -50,6 +55,7 @@ export const {
   usernameChange,
   passwordChange,
   accountDelete,
+  changeBanStatus,
 } = userSlice.actions;
 
 export default userSlice.reducer;
