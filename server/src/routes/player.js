@@ -10,4 +10,7 @@ export const playerRouter = Router()
   .get('/:username', PlayerController.getPlayer)
   .put('/change-password/:id', PlayerController.changePassword)
   .put('/change-username/:id', PlayerController.changeUsername)
+  .put('/change-role/:username', PlayerController.changeRole)
+  .put('/ban/:id', PlayerController.banPlayer)
+  .put('/unban/:id', PlayerController.unbanPlayer)
   .delete('/:id', PlayerController.deleteAccount);

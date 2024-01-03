@@ -63,6 +63,12 @@ export const login = async (req, res) => {
         'Invalid password. Check your data and try again'
       );
 
+    if (user.status === 'banned')
+      throw createHttpError(
+        400,
+        'Sorry, your account has been banned. Contact the administrator for more information'
+      );
+
     const userObject = user.toObject();
     delete userObject.password;
 
@@ -138,6 +144,38 @@ export const changeUsername = async (req, res) => {
   }
 };
 
+export const changeRole = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { role } = req.body;
+
+    if (role !== 'admin' && role !== 'player')
+      throw createHttpError(400, 'Role must be either admin or player');
+
+    const user = await PlayerModel.findOne({ username });
+
+    if (!user) throw createHttpError(400, 'User not found');
+
+    if (user.role === role)
+      throw createHttpError(
+        400,
+        'Please select different role than current one'
+      );
+
+    const updatedUser = await PlayerModel.findOneAndUpdate(
+      { username },
+      { role },
+      { new: true }
+    ).select('-password');
+
+    res.send({
+      message: `${username}'s role changed successfully`,
+    });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
 export const deleteAccount = async (req, res) => {
   try {
     const { id } = req.params;
@@ -193,6 +231,51 @@ export const leaderboard = async (req, res) => {
       .select('-password');
 
     res.json(players);
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const banPlayer = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { status } = await PlayerModel.findById(id).select('status');
+
+    if (status === 'banned')
+      throw createHttpError(400, 'Player is currently banned');
+
+    const player = await PlayerModel.findByIdAndUpdate(
+      id,
+      {
+        status: 'banned',
+      },
+      { new: true }
+    ).select('-password');
+
+    res.json({ message: 'Player banned successfully' });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const unbanPlayer = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { status } = await PlayerModel.findById(id).select('status');
+
+    if (status === 'active') throw createHttpError(400, 'Player is not banned');
+
+    const player = await PlayerModel.findByIdAndUpdate(
+      id,
+      {
+        status: 'active',
+      },
+      { new: true }
+    ).select('-password');
+
+    res.json({ message: 'Player unbanned successfully' });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
   }

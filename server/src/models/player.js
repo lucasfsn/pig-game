@@ -18,6 +18,16 @@ const playerSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  role: {
+    type: String,
+    enum: ['player', 'admin'],
+    default: 'player',
+  },
+  status: {
+    type: String,
+    enum: ['active', 'banned'],
+    default: 'active',
+  },
 });
 
 export default mongoose.model('Player', playerSchema);
