@@ -156,21 +156,43 @@ export const deleteAccount = async (req, res) => {
   }
 };
 
-export const getPlayerDetails = async (req, res) => {
+export const getPlayer = async (req, res) => {
   try {
-    const { id } = req.params;
-    const player = await PlayerModel.findById(id);
+    const { username } = req.params;
+    const player = await PlayerModel.findOne({ username }).select('-password');
 
     if (!player) {
       throw createHttpError(404, 'Player not found');
     }
 
     res.send({
-      player: {
-        id: player._id,
-        username: player.username,
-      },
+      player,
     });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const search = async (req, res) => {
+  const { username } = req.query;
+
+  const users = await PlayerModel.find({
+    username: { $regex: username || '', $options: 'i' },
+  }).select('-password');
+
+  res.json(users);
+};
+
+export const leaderboard = async (req, res) => {
+  try {
+    const sortField = req.query.sort || 'gamesPlayed';
+    const sortOrder = req.query.order === 'desc' ? -1 : 1;
+
+    const players = await PlayerModel.find()
+      .sort({ [sortField]: sortOrder })
+      .select('-password');
+
+    res.json(players);
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
   }
