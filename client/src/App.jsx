@@ -1,6 +1,8 @@
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/home/Home.jsx';
+import Leaderboard from './components/leaderboard/Leaderboard.jsx';
+import PlayerProfile from './components/profile/PlayerProfile.jsx';
 import Settings from './components/settings/Settings.jsx';
 import AppLayout from './components/ui/AppLayout.jsx';
 import ProtectedRoute from './components/ui/ProtectedRoute.jsx';
@@ -19,6 +21,8 @@ function App() {
             }
           >
             <Route path="/" element={<Home />} />
+            <Route path="/profile/:username?" element={<PlayerProfile />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/settings" element={<Settings />} />
           </Route>
           <Route path="/login" element={<Login />} />

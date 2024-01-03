@@ -1,7 +1,8 @@
-import { IoPerson } from 'react-icons/io5';
-import { MdLogout } from 'react-icons/md';
+import { IoPerson, IoSettingsSharp } from 'react-icons/io5';
+import { MdLeaderboard, MdLogout } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../user/useAuth.js';
+import Search from './Search.jsx';
 
 function Header() {
   const { logoutUser } = useAuth();
@@ -11,12 +12,25 @@ function Header() {
       <Link to="/">
         <img src="../../logo.png" alt="Pig Game" className="w-[50px]" />
       </Link>
+      <Search />
       <div className="flex gap-2">
+        <Link
+          to="/leaderboard"
+          className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2"
+        >
+          <MdLeaderboard />
+        </Link>
+        <Link
+          to="/profile"
+          className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2"
+        >
+          <IoPerson />
+        </Link>
         <Link
           to="/settings"
           className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2"
         >
-          <IoPerson />
+          <IoSettingsSharp />
         </Link>
         <button
           className="text-gray-950 text-3xl rounded-full bg-white w-auto p-2"
