@@ -4,7 +4,9 @@ export const getGame = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const game = await GameModel.findById(id);
+    const game = await GameModel.findById(id).populate(
+      'player1 player2 winner'
+    );
 
     if (!game) {
       throw createHttpError(404, 'Game not found');
@@ -20,10 +22,12 @@ export const getGame = async (req, res) => {
 
 export const createGame = async (req, res) => {
   try {
-    const game = new GameModel();
+    const { playerId } = req.body;
+
+    const game = new GameModel({ player1: playerId });
     const savedGame = await game.save();
 
-    res.status(201).send({
+    res.send({
       message: 'Game created successfully',
       game: savedGame,
     });
@@ -55,9 +59,9 @@ export const updateGame = async (req, res) => {
   }
 };
 
-export const addPlayerToGame = async (req, res) => {
+export const joinGame = async (req, res) => {
   const { id } = req.params;
-  const { player1, player2 } = req.body;
+  const { player } = req.body;
 
   try {
     const game = await GameModel.findById(id);
@@ -66,12 +70,11 @@ export const addPlayerToGame = async (req, res) => {
       throw createHttpError(404, 'Game not found');
     }
 
-    game.player1 = player1;
-    game.player2 = player2;
+    game.player2 = player;
     await game.save();
 
     res.send({
-      message: 'Players has been added to game successfully',
+      message: 'You have joined the game',
       game,
     });
   } catch (err) {
