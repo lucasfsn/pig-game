@@ -6,4 +6,5 @@ export const gameRouter = Router()
   .post('/', GameController.createGame)
   .get('/:id', GameController.getGame)
   .put('/:id', GameController.updateGame)
-  .post('/:id', GameController.joinGame);
+  .post('/:id', GameController.joinGame)
+  .delete('/:id', GameController.deleteGame);

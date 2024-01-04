@@ -1,3 +1,4 @@
+import createHttpError from 'http-errors';
 import ChatModel from '../models/chat.js';
 
 export const getChatHistory = async (req, res) => {

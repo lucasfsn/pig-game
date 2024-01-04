@@ -18,9 +18,17 @@ const gameSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  winner: {
+  activePlayer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Player',
+  },
+  currentScore: {
+    type: Number,
+    default: 0,
+  },
+  diceNumber: {
+    type: Number,
+    default: 1,
   },
 });
 

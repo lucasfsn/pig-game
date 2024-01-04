@@ -1,19 +1,25 @@
+import createHttpError from 'http-errors';
+import { Types } from 'mongoose';
 import GameModel from '../models/game.js';
 
 export const getGame = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const game = await GameModel.findById(id).populate(
-      'player1 player2 winner'
+    if (!Types.ObjectId.isValid(id))
+      throw createHttpError(404, 'Game not found');
+
+    const game = await GameModel.findById(id);
+
+    if (!game) throw createHttpError(404, 'Game not found');
+
+    const gameWithPlayersDetails = await game.populate(
+      'player1 player2',
+      '_id username'
     );
 
-    if (!game) {
-      throw createHttpError(404, 'Game not found');
-    }
-
     res.send({
-      game,
+      game: gameWithPlayersDetails,
     });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
@@ -24,7 +30,7 @@ export const createGame = async (req, res) => {
   try {
     const { playerId } = req.body;
 
-    const game = new GameModel({ player1: playerId });
+    const game = new GameModel({ player1: playerId, activePlayer: playerId });
     const savedGame = await game.save();
 
     res.send({
@@ -38,18 +44,16 @@ export const createGame = async (req, res) => {
 
 export const updateGame = async (req, res) => {
   const { id } = req.params;
-  const { player1, player2, score1, score2, winner } = req.body;
+  const { game: updatedGame } = req.body;
 
   try {
     const game = await GameModel.findByIdAndUpdate(
       id,
-      { player1, player2, score1, score2, winner },
+      { ...updatedGame },
       { new: true }
     );
 
-    if (!game) {
-      throw createHttpError(404, 'Game not found');
-    }
+    if (!game) throw createHttpError(404, 'Game not found');
 
     res.send({
       game,
@@ -61,21 +65,41 @@ export const updateGame = async (req, res) => {
 
 export const joinGame = async (req, res) => {
   const { id } = req.params;
-  const { player } = req.body;
+  const { playerId } = req.body;
 
   try {
     const game = await GameModel.findById(id);
 
-    if (!game) {
-      throw createHttpError(404, 'Game not found');
-    }
+    if (!game) throw createHttpError(404, 'Game not found');
 
-    game.player2 = player;
+    if (game.player2) throw createHttpError(400, 'Game is full');
+
+    game.player2 = playerId;
     await game.save();
 
     res.send({
       message: 'You have joined the game',
-      game,
+    });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const deleteGame = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const game = await GameModel.findById(id).populate('player1 player2');
+
+    if (!game) throw createHttpError(404, 'Game not found');
+
+    const winner =
+      game.score1 >= 100 ? game.player1.username : game.player2.username;
+
+    await GameModel.findByIdAndDelete(id);
+
+    res.send({
+      message: `Game has ended and the winner is ${winner}`,
     });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });

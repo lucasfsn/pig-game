@@ -1,11 +1,12 @@
 import fs from 'fs';
-import http from 'http';
 import https from 'https';
 import mongoose from 'mongoose';
 import os from 'os';
 import path from 'path';
 import { Server } from 'socket.io';
 import app from './app.js';
+import { updateGame } from './controllers/game.js';
+import GameModel from './models/game.js';
 import mqttClient from './mqtt.js';
 import env from './utils/validateEnv.js';
 
@@ -32,6 +33,16 @@ mongoose
         origin: 'http://localhost:3000',
         methods: ['GET', 'POST'],
       },
+    });
+
+    const gameChange = GameModel.watch();
+
+    gameChange.on('change', async game => {
+      const updatedGame = await GameModel.findById(
+        game.documentKey._id
+      ).populate('player1 player2', '_id username');
+
+      io.to(game.documentKey._id).emit('gameState', updatedGame);
     });
 
     io.on('connection', socket => {
