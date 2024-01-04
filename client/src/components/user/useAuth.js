@@ -23,7 +23,9 @@ export function useAuth() {
 
       navigate('/', { replace: true });
     } catch (err) {
-      toast.error(err.response.data.message || 'An unexpected error occurred');
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
 
       dispatch(error());
     }
@@ -43,7 +45,9 @@ export function useAuth() {
 
       navigate('/', { replace: true });
     } catch (err) {
-      toast.error(err.response.data.message || 'An unexpected error occurred');
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
 
       dispatch(error());
     }

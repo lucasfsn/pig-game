@@ -24,7 +24,9 @@ function PlayerProfile() {
       const { player } = await getPlayerApi(username);
       setProfile(player);
     } catch (err) {
-      toast.error(err.response.data.message || 'An unexpected error occurred');
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
     }
   }, [username]);
 
@@ -51,7 +53,9 @@ function PlayerProfile() {
       socket.emit('player banned', profile._id);
       fetchProfile();
     } catch (err) {
-      toast.error(err.response.data.message || 'An unexpected error occurred');
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
     }
   }
 

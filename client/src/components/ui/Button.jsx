@@ -9,7 +9,9 @@ function Button({
   return (
     <button
       type="submit"
-      className={`font-semibold px-6 py-1.5 w-fit mx-auto rounded-full hover:bg-opacity-80 transition-all disabled:cursor-not-allowed ${bgColor} ${textColor} ${textSize}`}
+      className={`font-semibold px-6 py-1.5 w-fit mx-auto rounded-full hover:bg-opacity-80 transition-all disabled:cursor-not-allowed ${textColor} ${textSize} ${
+        disabled ? 'bg-gray-400' : bgColor
+      }`}
       disabled={disabled}
       onClick={onClick}
     >

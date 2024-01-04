@@ -10,12 +10,14 @@ function Home() {
 
   const user = useSelector(getUser);
 
-  const { createGame } = useGame();
-
-  function handleJoinGame() {}
+  const { createGame, joinGame } = useGame();
 
   async function handleCreateGame() {
     await createGame(user._id);
+  }
+
+  async function handleJoinGame() {
+    await joinGame(gameId, user._id);
   }
 
   return (

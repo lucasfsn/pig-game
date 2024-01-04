@@ -31,7 +31,9 @@ export function useSettings() {
 
       toast.success(message);
     } catch (err) {
-      toast.error(err.response.data.message || 'An unexpected error occurred');
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
 
       dispatch(error());
     }
@@ -49,7 +51,9 @@ export function useSettings() {
 
       toast.success(message);
     } catch (err) {
-      toast.error(err.response.data.message || 'An unexpected error occurred');
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
 
       dispatch(error());
     }
@@ -69,7 +73,9 @@ export function useSettings() {
 
       navigate('/login', { replace: true });
     } catch (err) {
-      toast.error(err.response.data.message || 'An unexpected error occurred');
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
 
       dispatch(error());
     }
@@ -81,7 +87,9 @@ export function useSettings() {
 
       toast.success(message);
     } catch (err) {
-      toast.error(err.response.data.message || 'An unexpected error occurred');
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
     }
   }
 
