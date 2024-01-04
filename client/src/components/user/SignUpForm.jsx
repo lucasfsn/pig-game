@@ -34,7 +34,7 @@ function SignUpForm() {
         <input
           type="text"
           placeholder="Username"
-          className={`rounded-lg px-3 py-2 focus:outline-none text-2xl ${
+          className={`rounded-full p-3 bg-gray-300 py-2 focus:outline-none text-2xl ${
             formik.touched.username && formik.errors.username
               ? 'border-red-700 border'
               : ''
@@ -47,7 +47,7 @@ function SignUpForm() {
         <input
           type="password"
           placeholder="Password"
-          className={`rounded-lg px-3 py-2 focus:outline-none text-2xl ${
+          className={`rounded-full p-3 bg-gray-300 focus:outline-none text-2xl ${
             formik.touched.password && formik.errors.password
               ? 'border-red-700 border'
               : ''

@@ -31,7 +31,9 @@ function GamePanel({ game }) {
               <p className="text-3xl">CURRENT: 5</p>
             </>
           ) : (
-            <p>Waiting...</p>
+            <p className="flex">
+              Waiting <span class="loader"></span>
+            </p>
           )}
         </div>
       </div>

@@ -37,7 +37,7 @@ function LoginForm() {
         <input
           type="text"
           placeholder="Username"
-          className={`rounded-lg px-3 py-2 focus:outline-none text-2xl ${
+          className={`rounded-full p-3 focus:outline-none bg-gray-300 text-2xl ${
             formik.touched.username && formik.errors.username
               ? 'border-red-300 border'
               : ''
@@ -50,7 +50,7 @@ function LoginForm() {
         <input
           type="password"
           placeholder="Password"
-          className={`rounded-lg px-3 py-2 focus:outline-none text-2xl ${
+          className={`rounded-full p-3 focus:outline-none bg-gray-300 text-2xl ${
             formik.touched.password && formik.errors.password
               ? 'border-red-300 border'
               : ''

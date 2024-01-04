@@ -35,7 +35,7 @@ function Window({ children, name }) {
     <div className="fixed top-0 left-0 w-full h-screen backdrop-blur-sm z-50 transition-all">
       <div
         ref={ref}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-300 rounded-lg py-12 px-14 transition-all"
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-700 shadow-2xl rounded-lg py-12 px-14 transition-all"
       >
         <button
           onClick={close}
