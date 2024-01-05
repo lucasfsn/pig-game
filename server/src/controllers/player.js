@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
 import PlayerModel from '../models/player.js';
+import env from '../utils/validateEnv.js';
 
 export const signUp = async (req, res) => {
   const { username, password } = req.body;
@@ -35,9 +37,12 @@ export const signUp = async (req, res) => {
 
     const newUser = await PlayerModel.findOne({ username }).select('-password');
 
+    const token = jwt.sign(newUser, env.JWT_SECRET);
+
     res.send({
       message: 'Signed up successfully',
       player: newUser,
+      token,
     });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
@@ -69,12 +74,15 @@ export const login = async (req, res) => {
         'Sorry, your account has been banned. Contact the administrator for more information'
       );
 
+    const token = jwt.sign({ id: user._id }, env.JWT_SECRET);
+
     const userObject = user.toObject();
     delete userObject.password;
 
     res.send({
       message: 'Logged in successfully',
       player: userObject,
+      token,
     });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
@@ -148,6 +156,14 @@ export const changeRole = async (req, res) => {
   try {
     const { username } = req.params;
     const { role } = req.body;
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, env.JWT_SECRET);
+    const userId = decodedToken.id;
+
+    const isAdmin = await PlayerModel.findById(userId);
+
+    if (isAdmin.role !== 'admin') throw createHttpError(403, 'Forbidden');
 
     if (role !== 'admin' && role !== 'player')
       throw createHttpError(400, 'Role must be either admin or player');
@@ -240,6 +256,14 @@ export const banPlayer = async (req, res) => {
   try {
     const { id } = req.params;
 
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, env.JWT_SECRET);
+    const userId = decodedToken.id;
+
+    const user = await PlayerModel.findById(userId);
+
+    if (user.role !== 'admin') throw createHttpError(403, 'Forbidden');
+
     const { status } = await PlayerModel.findById(id).select('status');
 
     if (status === 'banned')
@@ -262,6 +286,14 @@ export const banPlayer = async (req, res) => {
 export const unbanPlayer = async (req, res) => {
   try {
     const { id } = req.params;
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, env.JWT_SECRET);
+    const userId = decodedToken.id;
+
+    const user = await PlayerModel.findById(userId);
+
+    if (user.role !== 'admin') throw createHttpError(403, 'Forbidden');
 
     const { status } = await PlayerModel.findById(id).select('status');
 
