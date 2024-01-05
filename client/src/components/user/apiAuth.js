@@ -13,7 +13,5 @@ export async function signupApi(user) {
 export async function loginApi(user) {
   const { data } = await axios.post(`${apiUrl}/login`, user);
 
-  const { message, player } = data;
-
-  return { message, player };
+  return data;
 }

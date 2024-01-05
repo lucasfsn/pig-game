@@ -13,9 +13,10 @@ export function useAuth() {
     dispatch(fetching());
 
     try {
-      const { message, player } = await loginApi(user);
+      const { message, player, token } = await loginApi(user);
 
       Cookies.set('user', JSON.stringify(player));
+      Cookies.set('token', token);
 
       dispatch(login(player));
 
@@ -55,6 +56,7 @@ export function useAuth() {
 
   async function logoutUser(type) {
     Cookies.remove('user');
+    Cookies.remove('token');
 
     dispatch(logout());
 

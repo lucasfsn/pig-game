@@ -107,7 +107,7 @@ function Settings() {
           </Button>
         </div>
       )}
-      <ChangeRole />
+      {user.role === 'admin' && <ChangeRole />}
     </div>
   );
 }
