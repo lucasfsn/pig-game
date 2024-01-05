@@ -36,9 +36,12 @@ export function useAuth() {
     dispatch(fetching());
 
     try {
-      const { message, player } = await signupApi(user);
+      const { message, player, token } = await signupApi(user);
 
       Cookies.set('user', JSON.stringify(player));
+      Cookies.set('token', token);
+
+      console.log(player);
 
       dispatch(login(player));
 
