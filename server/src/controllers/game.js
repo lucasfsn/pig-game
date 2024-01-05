@@ -1,6 +1,8 @@
 import createHttpError from 'http-errors';
 import { Types } from 'mongoose';
 import GameModel from '../models/game.js';
+import MessageModel from '../models/message.js';
+import PlayerModel from '../models/player.js';
 
 export const getGame = async (req, res) => {
   const { id } = req.params;
@@ -54,6 +56,27 @@ export const updateGame = async (req, res) => {
     );
 
     if (!game) throw createHttpError(404, 'Game not found');
+
+    const player1 = await PlayerModel.findById(game.player1);
+    const player2 = await PlayerModel.findById(game.player2);
+
+    if (game.score1 >= 100) {
+      await PlayerModel.findByIdAndUpdate(player1._id, {
+        gamesPlayed: player1.gamesPlayed + 1,
+        gamesWon: player1.gamesWon + 1,
+      });
+      await PlayerModel.findByIdAndUpdate(player2._id, {
+        gamesPlayed: player2.gamesPlayed + 1,
+      });
+    } else if (game.score2 >= 100) {
+      await PlayerModel.findByIdAndUpdate(player1._id, {
+        gamesPlayed: player1.gamesPlayed + 1,
+      });
+      await PlayerModel.findByIdAndUpdate(player2._id, {
+        gamesPlayed: player2.gamesPlayed + 1,
+        gamesWon: player2.gamesWon + 1,
+      });
+    }
 
     res.send({
       game,
