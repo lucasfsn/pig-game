@@ -37,7 +37,7 @@ export const signUp = async (req, res) => {
 
     const newUser = await PlayerModel.findOne({ username }).select('-password');
 
-    const token = jwt.sign(newUser, env.JWT_SECRET);
+    const token = jwt.sign({ id: newUser._id.toString() }, env.JWT_SECRET);
 
     res.send({
       message: 'Signed up successfully',
@@ -74,7 +74,7 @@ export const login = async (req, res) => {
         'Sorry, your account has been banned. Contact the administrator for more information'
       );
 
-    const token = jwt.sign({ id: user._id }, env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id.toString() }, env.JWT_SECRET);
 
     const userObject = user.toObject();
     delete userObject.password;
