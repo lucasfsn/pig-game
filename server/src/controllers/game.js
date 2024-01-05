@@ -119,6 +119,8 @@ export const deleteGame = async (req, res) => {
     const winner =
       game.score1 >= 100 ? game.player1.username : game.player2.username;
 
+    await MessageModel.deleteMany({ game: id });
+
     await GameModel.findByIdAndDelete(id);
 
     res.send({

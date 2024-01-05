@@ -9,7 +9,8 @@ client.on('connect', () => {
   client.subscribe('game/leave');
   client.subscribe('game/hold');
   client.subscribe('game/roll');
-  client.subscribe('game/chat/message');
+  client.subscribe('game/chat/message/add');
+  client.subscribe('game/chat/message/delete');
 });
 
 client.on('error', error => {
