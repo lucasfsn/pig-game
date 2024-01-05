@@ -26,6 +26,7 @@ function Game() {
       const game = await getGame(id);
       if (game) setGame(game);
     }
+
     fetchGame();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -96,7 +97,7 @@ function Game() {
         </div>
       )}
       <GamePanel game={game} />
-      <GameChat />
+      <GameChat game={game} />
     </div>
   );
 }

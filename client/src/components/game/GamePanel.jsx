@@ -66,7 +66,8 @@ function GamePanel({ game }) {
       <div className="bg-gray-900 w-[95%] h-4/5 flex text-5xl relative max-h-[600px]">
         <div className="w-1/2 flex flex-col items-center justify-center gap-10">
           <p>
-            {game.player1.username}: {game.score1}
+            {game.player1._id === user._id ? 'You' : game.player1.username}:{' '}
+            {game.score1}
           </p>
           <p className="text-3xl">
             CURRENT:{' '}
@@ -98,7 +99,8 @@ function GamePanel({ game }) {
           {game.player2 ? (
             <>
               <p>
-                {game.player2.username}: {game.score2}
+                {game.player2._id === user._id ? 'You' : game.player2.username}:{' '}
+                {game.score2}
               </p>
               <p className="text-3xl">
                 CURRENT:{' '}
