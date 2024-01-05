@@ -99,15 +99,15 @@ function PlayerProfile() {
           )}
         {user.role !== 'admin' &&
           user.username !== profile.username &&
-          profile.status === 'banned' && (
-            <span className="rounded-full bg-green-600 text-gray-900 px-3 py-1 text-lg">
+          profile.status === 'active' && (
+            <span className="rounded-full bg-green-600 text-gray-900 px-3 py-1 text-xl w-fit self-center">
               not banned
             </span>
           )}
         {user.role !== 'admin' &&
           user.username !== profile.username &&
-          profile.status === 'active' && (
-            <span className="rounded-full bg-red-600 text-gray-900 px-3 py-1 text-lg">
+          profile.status === 'banned' && (
+            <span className="rounded-full bg-red-600 px-3 py-1 text-xl w-fit self-center text-gray-100">
               banned
             </span>
           )}

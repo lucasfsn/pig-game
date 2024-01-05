@@ -9,10 +9,11 @@ import AppLayout from './components/ui/AppLayout.jsx';
 import PageNotFound from './components/ui/PageNotFound.jsx';
 import ProtectedRoute from './components/ui/ProtectedRoute.jsx';
 import Login from './components/user/Login.jsx';
+import { DarkModeProvider } from './context/DarkModeContext.jsx';
 
 function App() {
   return (
-    <>
+    <DarkModeProvider>
       <BrowserRouter>
         <Routes>
           <Route
@@ -52,7 +53,7 @@ function App() {
           },
         }}
       />
-    </>
+    </DarkModeProvider>
   );
 }
 

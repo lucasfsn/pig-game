@@ -28,9 +28,9 @@ function AppLayout() {
   }, [user, dispatch, logoutUser]);
 
   return (
-    <div className="flex h-screen flex-col bg-gray-950">
+    <div className="flex h-screen flex-col">
       <Header />
-      <main className="w-full text-white h-full flex-grow">
+      <main className="w-full text-white h-full flex-grow bg-gray-950">
         {isLoading ? <Spinner /> : null}
         <Outlet />
       </main>

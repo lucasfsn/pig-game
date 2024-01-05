@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDarkMode } from '../../context/DarkModeContext.jsx';
 import { useOutsideClick } from '../../hooks/useOutsideclick.js';
 import { searchApi } from '../profile/apiProfile.js';
 
@@ -8,6 +9,7 @@ function Search() {
   const [query, setQuery] = useState('');
 
   const { ref } = useOutsideClick(() => setResults([]));
+  const { isDarkMode } = useDarkMode();
 
   async function handleSearch(e) {
     setQuery(e.target.value);
@@ -32,7 +34,9 @@ function Search() {
       />
       {results.length > 0 ? (
         <div
-          className="absolute bg-gray-800 rounded-lg min-w-full mt-1 p-1 flex flex-col gap-1 overflow-y-scroll max-h-96"
+          className={`absolute rounded-lg min-w-full mt-1 p-1 flex flex-col gap-1 overflow-y-scroll max-h-96 z-50 ${
+            isDarkMode ? 'bg-gray-800' : 'bg-gray-400'
+          }`}
           ref={ref}
         >
           {results.map(result => (

@@ -74,7 +74,7 @@ function Leaderboard() {
                     not banned
                   </span>
                 ) : (
-                  <span className="rounded-full bg-red-600 text-gray-900 px-3 py-1 text-lg">
+                  <span className="rounded-full bg-red-600 text-gray-100 px-3 py-1 text-lg">
                     banned
                   </span>
                 )}
