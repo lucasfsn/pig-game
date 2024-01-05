@@ -1,9 +1,12 @@
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import {
+  addMessageApi,
   createGameApi,
   deleteGameApi,
+  deleteMessageApi,
   getGameApi,
+  getMessagesApi,
   joinGameApi,
   updateGameApi,
 } from './apiGame.js';
@@ -78,5 +81,46 @@ export function useGame() {
     }
   }
 
-  return { getGame, createGame, joinGame, updateGame, deleteGame };
+  async function getMessages(gameId) {
+    try {
+      const { messages } = await getMessagesApi(gameId);
+
+      return messages;
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
+    }
+  }
+
+  async function addMessage(gameId, playerId, message) {
+    try {
+      await addMessageApi(gameId, playerId, message);
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
+    }
+  }
+
+  async function deleteMessage(gameId, messageId) {
+    try {
+      await deleteMessageApi(gameId, messageId);
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
+    }
+  }
+
+  return {
+    getGame,
+    createGame,
+    joinGame,
+    updateGame,
+    deleteGame,
+    addMessage,
+    deleteMessage,
+    getMessages,
+  };
 }

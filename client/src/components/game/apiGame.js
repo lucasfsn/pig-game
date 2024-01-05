@@ -37,3 +37,25 @@ export async function deleteGameApi(gameId) {
 
   return data;
 }
+
+export async function getMessagesApi(gameId) {
+  const { data } = await axios.get(`${apiUrl}/message/${gameId}`);
+
+  return data;
+}
+
+export async function addMessageApi(gameId, playerId, message) {
+  const { data } = await axios.post(`${apiUrl}/message/${gameId}/${playerId}`, {
+    message,
+  });
+
+  return data;
+}
+
+export async function deleteMessageApi(gameId, messageId) {
+  const { data } = await axios.delete(
+    `${apiUrl}/message/${gameId}/${messageId}`
+  );
+
+  return data;
+}
