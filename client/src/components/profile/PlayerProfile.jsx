@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import socket from '../../socket.js';
+import { mqttPublish } from '../../helpers/mqttPublish.js';
 import Button from '../ui/Button.jsx';
 import Spinner from '../ui/Spinner.jsx';
 import { getUser } from '../user/userSlice.js';
@@ -50,7 +50,8 @@ function PlayerProfile() {
 
       toast.success(banMessage);
 
-      socket.emit('player banned', profile._id);
+      mqttPublish('player/ban', profile._id);
+
       fetchProfile();
     } catch (err) {
       toast.error(

@@ -65,7 +65,6 @@ export function useGame() {
   async function deleteGame(gameId, playerId) {
     try {
       const { message } = await deleteGameApi(gameId);
-      console.log('jd');
 
       toast(message, {
         icon: '🥇',

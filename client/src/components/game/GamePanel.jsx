@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { mqttPublish } from '../../helpers/mqttPublish.js';
 import Button from '../ui/Button.jsx';
 import { getUser } from '../user/userSlice.js';
 import { useGame } from './useGame.js';
@@ -15,6 +16,7 @@ function GamePanel({ game }) {
   }, [game.diceNumber]);
 
   async function handleRoll() {
+    if (!game.player2) return;
     const newDice = Math.floor(Math.random() * 6) + 1;
 
     const nextPlayer =
@@ -30,9 +32,12 @@ function GamePanel({ game }) {
     };
 
     await updateGame(updatedGame);
+    mqttPublish('game/roll', JSON.stringify({ updatedGame }));
   }
 
   async function handleHold() {
+    if (!game.player2) return;
+
     const nextPlayer =
       game.activePlayer === game.player1._id
         ? game.player2._id
@@ -53,11 +58,12 @@ function GamePanel({ game }) {
     };
 
     await updateGame(updatedGame);
+    mqttPublish('game/hold', JSON.stringify({ updatedGame }));
   }
 
   return (
     <div className="w-3/4 flex justify-center items-center">
-      <div className="bg-gray-900 w-[95%] h-4/5 flex text-5xl relative">
+      <div className="bg-gray-900 w-[95%] h-4/5 flex text-5xl relative max-h-[600px]">
         <div className="w-1/2 flex flex-col items-center justify-center gap-10">
           <p>
             {game.player1.username}: {game.score1}
@@ -76,14 +82,14 @@ function GamePanel({ game }) {
           <Button
             bgColor="bg-pink-800"
             onClick={handleRoll}
-            disabled={game.activePlayer !== user._id}
+            disabled={game.activePlayer !== user._id || !game.player2}
           >
             ROLL DICE
           </Button>
           <Button
             bgColor="bg-pink-800"
             onClick={handleHold}
-            disabled={game.activePlayer !== user._id}
+            disabled={game.activePlayer !== user._id || !game.player2}
           >
             HOLD
           </Button>

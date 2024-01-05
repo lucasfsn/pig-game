@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import socket from '../../socket.js';
+import { useMqttSubscribe } from '../../hooks/useMqttSubscribe.js';
 import { useAuth } from '../user/useAuth.js';
 import { changeBanStatus, getLoading, getUser } from '../user/userSlice.js';
 import Header from './Header.jsx';
@@ -14,18 +14,16 @@ function AppLayout() {
   const { logoutUser } = useAuth();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    socket.on('player banned', bannedUserId => {
-      if (user && user._id === bannedUserId) {
-        dispatch(changeBanStatus('banned'));
-        logoutUser('ban');
-      }
-    });
+  const [message, clearMessage] = useMqttSubscribe('player/ban');
 
-    return () => {
-      socket.off('player banned');
-    };
-  }, [user, dispatch, logoutUser]);
+  useEffect(() => {
+    if (user && user._id === message) {
+      dispatch(changeBanStatus('banned'));
+      logoutUser('ban');
+    }
+
+    clearMessage();
+  }, [user, dispatch, logoutUser, message, clearMessage]);
 
   return (
     <div className="flex h-screen flex-col">

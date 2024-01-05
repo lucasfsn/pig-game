@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { mqttPublish } from '../../helpers/mqttPublish.js';
 import { useGame } from '../game/useGame.js';
 import Button from '../ui/Button.jsx';
 import { getUser } from '../user/userSlice.js';
@@ -18,6 +19,7 @@ function Home() {
 
   async function handleJoinGame() {
     await joinGame(gameId, user._id);
+    mqttPublish('game/join', JSON.stringify({ gameId, user }));
   }
 
   return (
