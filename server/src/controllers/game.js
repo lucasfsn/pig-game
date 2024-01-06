@@ -91,6 +91,9 @@ export const joinGame = async (req, res) => {
   const { playerId } = req.body;
 
   try {
+    if (!Types.ObjectId.isValid(id))
+      throw createHttpError(404, 'Invalid game id');
+
     const game = await GameModel.findById(id);
 
     if (!game) throw createHttpError(404, 'Game not found');
@@ -117,7 +120,7 @@ export const deleteGame = async (req, res) => {
     if (!game) throw createHttpError(404, 'Game not found');
 
     const winner =
-      game.score1 >= 100 ? game.player1.username : game.player2.username;
+      game.score1 >= 100 ? game.player1.username : game.player2?.username;
 
     await MessageModel.deleteMany({ game: id });
 
@@ -125,6 +128,29 @@ export const deleteGame = async (req, res) => {
 
     res.send({
       message: `Game has ended and the winner is ${winner}`,
+    });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const leaveGame = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const game = await GameModel.findById(id);
+
+    if (!game) throw createHttpError(404, 'Game not found');
+
+    const updatedGame = await GameModel.findByIdAndUpdate(
+      id,
+      { $unset: { player2: '' } },
+      { new: true }
+    ).populate('player1');
+
+    res.send({
+      message: "You've left the game",
+      game: updatedGame,
     });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
