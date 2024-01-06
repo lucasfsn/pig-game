@@ -44,8 +44,30 @@ function PlayerProfile() {
         const { message } = await unbanPlayerApi(profile._id);
         banMessage = message;
       } else if (profile.status === 'active') {
-        const { message } = await banPlayerApi(profile._id);
+        const { message, games } = await banPlayerApi(profile._id);
         banMessage = message;
+
+        games.forEach(game => {
+          if (game.player2?._id === profile._id)
+            mqttPublish(
+              `game/${game._id}/leave`,
+              JSON.stringify({
+                updatedGame: {
+                  ...game,
+                  player2: null,
+                },
+                message: `${profile.username} has left the game`,
+              })
+            );
+          else if (game.player1._id === profile._id)
+            mqttPublish(
+              `game/${game._id}/lobbyOwnerBan`,
+              JSON.stringify({
+                message: `${profile.username} has been banned from and the game has ended`,
+                bannedPlayer: profile._id,
+              })
+            );
+        });
       }
 
       toast.success(banMessage);

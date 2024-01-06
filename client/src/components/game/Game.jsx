@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { mqttPublish } from '../../helpers/mqttPublish.js';
 import { useMqttSubscribe } from '../../hooks/useMqttSubscribe.js';
 import Button from '../ui/Button.jsx';
@@ -17,6 +17,7 @@ function Game() {
   const { id } = useParams();
   const { getGame, deleteGame, joinGame } = useGame();
   const user = useSelector(getUser);
+  const navigate = useNavigate();
 
   const [joinMessage, clearJoinMessage] = useMqttSubscribe(`game/${id}/join`);
   const [leaveMessage, clearLeaveMessage] = useMqttSubscribe(
@@ -24,6 +25,9 @@ function Game() {
   );
   const [rollMessage, clearRollMessage] = useMqttSubscribe(`game/${id}/roll`);
   const [holdMessage, clearHoldMessage] = useMqttSubscribe(`game/${id}/hold`);
+  const [lobbyOwnerBanMessage, clearLobbyOwnerBanMessage] = useMqttSubscribe(
+    `game/${id}/lobbyOwnerBan`
+  );
 
   useEffect(() => {
     async function fetchGame() {
@@ -37,6 +41,20 @@ function Game() {
 
   useEffect(() => {
     if (!game) return;
+
+    if (lobbyOwnerBanMessage) {
+      const { message, bannedPlayer } = JSON.parse(lobbyOwnerBanMessage);
+
+      if (bannedPlayer !== user._id) {
+        toast(message, {
+          icon: '❌',
+        });
+
+        navigate('/');
+      }
+
+      clearLobbyOwnerBanMessage();
+    }
 
     if (joinMessage) {
       const { gameId, user } = JSON.parse(joinMessage);
@@ -55,9 +73,10 @@ function Game() {
       const { updatedGame, message } = JSON.parse(leaveMessage);
       if (game._id === updatedGame._id) setGame(updatedGame);
 
-      toast(message, {
-        icon: '❌',
-      });
+      !message.includes(user.username) &&
+        toast(message, {
+          icon: '❌',
+        });
 
       clearLeaveMessage();
     }
@@ -80,16 +99,21 @@ function Game() {
 
       clearHoldMessage();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     joinMessage,
     rollMessage,
     holdMessage,
     leaveMessage,
+    lobbyOwnerBanMessage,
+    clearLobbyOwnerBanMessage,
     clearLeaveMessage,
     clearHoldMessage,
     clearRollMessage,
     clearJoinMessage,
+    user._id,
+    navigate,
   ]);
 
   async function handleJoinGame() {
