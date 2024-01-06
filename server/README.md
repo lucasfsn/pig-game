@@ -6,10 +6,10 @@ Clone the entire repository
   git clone https://github.com/lucasfsn/pig-game
 ```
 
-Go to the client directory
+Go to the server directory
 
 ```bash
-  cd client
+  cd server
 ```
 
 Install dependencies
@@ -26,10 +26,14 @@ Create .env file
 
 .env must contain the following variables:
 
-- REACT_APP_BACKEND_API_URL
+- MONGO_CONNECTION_STRING
+- PORT
+- JWT_SECRET
 
-Start the client
+You also need to provide mqtt broker in the mqtt.js file
+
+Start the server
 
 ```bash
-  npm start
+  npm run start:dev
 ```
