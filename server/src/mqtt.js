@@ -5,6 +5,7 @@ const client = mqtt.connect('ws://localhost:9001/mqtt');
 client.on('connect', () => {
   console.log('Connected to MQTT broker');
   client.subscribe('player/+/ban');
+  client.subscribe('game/+/lobbyOwnerBan');
   client.subscribe('game/+/join');
   client.subscribe('game/+/leave');
   client.subscribe('game/+/hold');

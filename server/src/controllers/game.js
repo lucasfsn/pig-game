@@ -144,7 +144,16 @@ export const leaveGame = async (req, res) => {
 
     const updatedGame = await GameModel.findByIdAndUpdate(
       id,
-      { $unset: { player2: '' } },
+      {
+        $set: {
+          score2: 0,
+          currentScore:
+            game.activePlayer.toString() === game.player2.toString()
+              ? 0
+              : game.currentScore,
+        },
+        $unset: { player2: '' },
+      },
       { new: true }
     ).populate('player1');
 

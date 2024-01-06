@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
+import GameModel from '../models/game.js';
 import PlayerModel from '../models/player.js';
 import env from '../utils/validateEnv.js';
 
@@ -269,7 +270,7 @@ export const banPlayer = async (req, res) => {
     if (status === 'banned')
       throw createHttpError(400, 'Player is currently banned');
 
-    const player = await PlayerModel.findByIdAndUpdate(
+    await PlayerModel.findByIdAndUpdate(
       id,
       {
         status: 'banned',
@@ -277,7 +278,28 @@ export const banPlayer = async (req, res) => {
       { new: true }
     ).select('-password');
 
-    res.json({ message: 'Player banned successfully' });
+    const games = await GameModel.find({
+      $or: [{ player1: id }, { player2: id }],
+    }).populate('player1 player2');
+
+    for (let game of games) {
+      if (game.player1._id.toString() === id) {
+        await GameModel.findByIdAndDelete(game._id);
+      } else if (game.player2._id.toString() === id) {
+        await GameModel.findByIdAndUpdate(game._id, {
+          $set: {
+            score2: 0,
+            currentScore:
+              game.activePlayer.toString() === game.player2._id.toString()
+                ? 0
+                : game.currentScore,
+          },
+          $unset: { player2: '' },
+        });
+      }
+    }
+
+    res.json({ message: 'Player banned successfully', games });
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
   }
