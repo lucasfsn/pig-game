@@ -14,9 +14,11 @@ function GameChat({ game }) {
 
   const { getMessages, addMessage, deleteMessage } = useGame();
   const user = useSelector(getUser);
-  const [mqttAdd, mqttAddClear] = useMqttSubscribe('game/chat/message/add');
+  const [mqttAdd, mqttAddClear] = useMqttSubscribe(
+    `game/${game._id}/chat/message/add`
+  );
   const [mqttDelete, mqttDeleteClear] = useMqttSubscribe(
-    'game/chat/message/delete'
+    `game/${game._id}/chat/message/delete`
   );
 
   useEffect(() => {
@@ -36,26 +38,26 @@ function GameChat({ game }) {
       mqttDeleteClear();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game._id, mqttAdd, mqttDelete]);
+  }, [game._id, mqttAdd, mqttDelete, mqttDeleteClear, mqttAddClear]);
 
   async function handleSend() {
     await addMessage(game._id, user._id, message);
     setMessage('');
     mqttPublish(
-      'game/chat/message/add',
-      JSON.stringify({ gameId: game._id, message })
+      `game/${game._id}/chat/message/add`,
+      JSON.stringify({ message })
     );
   }
 
   async function handleDelete(id) {
     await deleteMessage(game._id, id);
-    mqttPublish('game/chat/message/delete', JSON.stringify({ id }));
+    mqttPublish(`game/${game._id}/chat/message/delete`, JSON.stringify({ id }));
   }
 
   return (
     <div className="w-1/4 bg-gray-900 h-full flex flex-col-reverse px-3 py-4 gap-5 overflow-y-scroll">
       {game.player1._id === user._id || game.player2?._id === user._id ? (
-        <div className="flex gap-2 sticky right-0 bottom-0 bg-gray-950">
+        <div className="flex gap-2 sticky right-0 bottom-0 bg-gray-900">
           <input
             type="text"
             className="w-4/5 rounded-full text-xl px-3 outline-none text-black"

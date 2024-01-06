@@ -50,7 +50,7 @@ function PlayerProfile() {
 
       toast.success(banMessage);
 
-      mqttPublish('player/ban', profile._id);
+      mqttPublish(`player/${profile._id}/ban`, profile._id);
 
       fetchProfile();
     } catch (err) {

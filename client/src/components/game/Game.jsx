@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { mqttPublish } from '../../helpers/mqttPublish.js';
@@ -17,9 +18,12 @@ function Game() {
   const { getGame, deleteGame, joinGame } = useGame();
   const user = useSelector(getUser);
 
-  const [joinMessage, clearJoinMessage] = useMqttSubscribe('game/join');
-  const [rollMessage, clearRollMessage] = useMqttSubscribe('game/roll');
-  const [holdMessage, clearHoldMessage] = useMqttSubscribe('game/hold');
+  const [joinMessage, clearJoinMessage] = useMqttSubscribe(`game/${id}/join`);
+  const [leaveMessage, clearLeaveMessage] = useMqttSubscribe(
+    `game/${id}/leave`
+  );
+  const [rollMessage, clearRollMessage] = useMqttSubscribe(`game/${id}/roll`);
+  const [holdMessage, clearHoldMessage] = useMqttSubscribe(`game/${id}/hold`);
 
   useEffect(() => {
     async function fetchGame() {
@@ -47,6 +51,17 @@ function Game() {
       clearJoinMessage();
     }
 
+    if (leaveMessage) {
+      const { updatedGame, message } = JSON.parse(leaveMessage);
+      if (game._id === updatedGame._id) setGame(updatedGame);
+
+      toast(message, {
+        icon: '❌',
+      });
+
+      clearLeaveMessage();
+    }
+
     if (rollMessage) {
       const { updatedGame } = JSON.parse(rollMessage);
       if (game._id === updatedGame._id) setGame(updatedGame);
@@ -70,6 +85,8 @@ function Game() {
     joinMessage,
     rollMessage,
     holdMessage,
+    leaveMessage,
+    clearLeaveMessage,
     clearHoldMessage,
     clearRollMessage,
     clearJoinMessage,
@@ -77,7 +94,10 @@ function Game() {
 
   async function handleJoinGame() {
     await joinGame(game._id, user._id);
-    mqttPublish('game/join', JSON.stringify({ gameId: game._id, user }));
+    mqttPublish(
+      `game/${game._id}/join`,
+      JSON.stringify({ gameId: game._id, user })
+    );
   }
 
   if (!game) return <Spinner />;

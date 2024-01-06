@@ -14,7 +14,7 @@ function AppLayout() {
   const { logoutUser } = useAuth();
   const dispatch = useDispatch();
 
-  const [message, clearMessage] = useMqttSubscribe('player/ban');
+  const [message, clearMessage] = useMqttSubscribe(`player/${user._id}/ban`);
 
   useEffect(() => {
     if (user && user._id === message) {

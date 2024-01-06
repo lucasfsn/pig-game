@@ -8,6 +8,7 @@ import {
   getGameApi,
   getMessagesApi,
   joinGameApi,
+  leaveGameApi,
   updateGameApi,
 } from './apiGame.js';
 
@@ -65,15 +66,35 @@ export function useGame() {
     }
   }
 
-  async function deleteGame(gameId, playerId) {
+  async function deleteGame(gameId, winnerChosen = true) {
     try {
       const { message } = await deleteGameApi(gameId);
 
-      toast(message, {
-        icon: '🥇',
-      });
+      winnerChosen
+        ? toast(message, {
+            icon: '🥇',
+          })
+        : toast('Game has been deleted', {
+            icon: '🗑️',
+          });
 
       navigate('/', { replace: true });
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || 'An unexpected error occurred'
+      );
+    }
+  }
+
+  async function leaveGame(gameId) {
+    try {
+      const { message, game } = await leaveGameApi(gameId);
+
+      toast.success(message);
+
+      navigate('/', { replace: true });
+
+      return game;
     } catch (err) {
       toast.error(
         err.response?.data?.message || 'An unexpected error occurred'
@@ -119,6 +140,7 @@ export function useGame() {
     joinGame,
     updateGame,
     deleteGame,
+    leaveGame,
     addMessage,
     deleteMessage,
     getMessages,

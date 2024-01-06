@@ -19,7 +19,7 @@ function Home() {
 
   async function handleJoinGame() {
     await joinGame(gameId, user._id);
-    mqttPublish('game/join', JSON.stringify({ gameId, user }));
+    mqttPublish(`game/${gameId}/join`, JSON.stringify({ gameId, user }));
   }
 
   return (

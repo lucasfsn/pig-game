@@ -8,7 +8,7 @@ import { useGame } from './useGame.js';
 function GamePanel({ game }) {
   const [dice, setDice] = useState(game.diceNumber);
 
-  const { updateGame } = useGame();
+  const { updateGame, deleteGame, leaveGame } = useGame();
   const user = useSelector(getUser);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function GamePanel({ game }) {
     };
 
     await updateGame(updatedGame);
-    mqttPublish('game/roll', JSON.stringify({ updatedGame }));
+    mqttPublish(`game/${game._id}/roll`, JSON.stringify({ updatedGame }));
   }
 
   async function handleHold() {
@@ -58,7 +58,28 @@ function GamePanel({ game }) {
     };
 
     await updateGame(updatedGame);
-    mqttPublish('game/hold', JSON.stringify({ updatedGame }));
+    mqttPublish(`game/${game._id}/hold`, JSON.stringify({ updatedGame }));
+  }
+
+  async function handleDeleteOrLeave() {
+    if (game.player1._id === user._id && !game.player2) {
+      await deleteGame(game._id, false);
+    } else if (game.player2 && game.player2._id === user._id) {
+      const updatedGame = await leaveGame(game._id);
+
+      mqttPublish(
+        `game/${game._id}/leave`,
+        JSON.stringify({
+          updatedGame,
+          message: `${user.username} has left the game`,
+        })
+      );
+    }
+  }
+
+  function deleteOrLeaveText() {
+    if (game.player1._id === user._id) return 'Delete game';
+    else if (game.player2?._id === user._id) return 'Leave game';
   }
 
   return (
@@ -79,6 +100,15 @@ function GamePanel({ game }) {
           alt={`Dice-${dice}`}
           className="h-[50px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         />
+        <div className="absolute top-10 left-1/2 -translate-x-1/2">
+          <Button
+            bgColor="bg-red-950"
+            onClick={handleDeleteOrLeave}
+            disabled={game.player1._id === user._id && game.player2}
+          >
+            {deleteOrLeaveText()}
+          </Button>
+        </div>
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col gap-4">
           <Button
             bgColor="bg-pink-800"
