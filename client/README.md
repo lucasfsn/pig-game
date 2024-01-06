@@ -27,6 +27,7 @@ Create .env file
 .env must contain the following variables:
 
 - REACT_APP_BACKEND_API_URL
+- REACT_APP_BROKER_URL
 
 Start the client
 

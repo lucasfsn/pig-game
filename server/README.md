@@ -29,8 +29,7 @@ Create .env file
 - MONGO_CONNECTION_STRING
 - PORT
 - JWT_SECRET
-
-You also need to provide mqtt broker in the mqtt.js file
+- BROKER_URL
 
 Start the server
 
