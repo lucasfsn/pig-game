@@ -3,9 +3,9 @@ import Cookies from 'js-cookie';
 
 const apiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
-const token = Cookies.get('token');
-
 export async function searchApi(username) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.get(`${apiUrl}/search?username=${username}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -16,6 +16,8 @@ export async function searchApi(username) {
 }
 
 export async function getPlayerApi(username) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.get(`${apiUrl}/${username}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -26,6 +28,8 @@ export async function getPlayerApi(username) {
 }
 
 export async function banPlayerApi(id) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.put(
     `${apiUrl}/ban/${id}`,
     {},
@@ -40,6 +44,8 @@ export async function banPlayerApi(id) {
 }
 
 export async function unbanPlayerApi(id) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.put(
     `${apiUrl}/unban/${id}`,
     {},

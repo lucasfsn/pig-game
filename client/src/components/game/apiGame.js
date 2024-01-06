@@ -3,9 +3,9 @@ import Cookies from 'js-cookie';
 
 const apiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
-const token = Cookies.get('token');
-
 export async function createGameApi(playerId) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.post(
     `${apiUrl}/game`,
     {
@@ -22,6 +22,8 @@ export async function createGameApi(playerId) {
 }
 
 export async function joinGameApi(gameId, playerId) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.post(
     `${apiUrl}/game/${gameId}`,
     {
@@ -38,6 +40,8 @@ export async function joinGameApi(gameId, playerId) {
 }
 
 export async function getGameApi(id) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.get(`${apiUrl}/game/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -48,6 +52,8 @@ export async function getGameApi(id) {
 }
 
 export async function updateGameApi(game) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.put(
     `${apiUrl}/game/${game._id}`,
     {
@@ -64,6 +70,8 @@ export async function updateGameApi(game) {
 }
 
 export async function deleteGameApi(gameId) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.delete(`${apiUrl}/game/${gameId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -74,6 +82,8 @@ export async function deleteGameApi(gameId) {
 }
 
 export async function leaveGameApi(gameId) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.put(
     `${apiUrl}/game/leave/${gameId}`,
     {},
@@ -88,6 +98,8 @@ export async function leaveGameApi(gameId) {
 }
 
 export async function getMessagesApi(gameId) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.get(`${apiUrl}/message/${gameId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -98,6 +110,8 @@ export async function getMessagesApi(gameId) {
 }
 
 export async function addMessageApi(gameId, playerId, message) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.post(
     `${apiUrl}/message/${gameId}/${playerId}`,
     {
@@ -114,6 +128,8 @@ export async function addMessageApi(gameId, playerId, message) {
 }
 
 export async function deleteMessageApi(gameId, messageId) {
+  const token = Cookies.get('token');
+
   const { data } = await axios.delete(
     `${apiUrl}/message/${gameId}/${messageId}`,
     {
