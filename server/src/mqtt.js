@@ -1,6 +1,7 @@
 import mqtt from 'mqtt';
+import env from './utils/validateEnv.js';
 
-const client = mqtt.connect('ws://localhost:9001/mqtt');
+const client = mqtt.connect(env.BROKER_URL);
 
 client.on('connect', () => {
   console.log('Connected to MQTT broker');
