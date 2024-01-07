@@ -55,7 +55,7 @@ function GameChat({ game }) {
   }
 
   return (
-    <div className="w-1/4 bg-gray-900 h-full flex flex-col-reverse px-3 py-4 gap-5 overflow-y-scroll">
+    <div className="w-[95%] self-center md:w-1/4 bg-gray-900 h-1/3 md:h-full flex flex-col-reverse px-3 py-4 gap-5 overflow-y-scroll">
       {game.player1._id === user._id || game.player2?._id === user._id ? (
         <div className="flex gap-2 sticky right-0 bottom-0 bg-gray-900">
           <input

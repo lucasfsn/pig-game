@@ -83,7 +83,7 @@ function GamePanel({ game }) {
   }
 
   return (
-    <div className="w-3/4 flex justify-center items-center">
+    <div className="w-full md:w-3/4 flex justify-center items-center h-2/3 md:h-full">
       <div className="bg-gray-900 w-[95%] h-4/5 flex text-5xl relative max-h-[600px]">
         <div className="w-1/2 flex flex-col items-center justify-center gap-10">
           <p>
@@ -100,15 +100,17 @@ function GamePanel({ game }) {
           alt={`Dice-${dice}`}
           className="h-[50px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         />
-        <div className="absolute top-10 left-1/2 -translate-x-1/2">
-          <Button
-            bgColor="bg-red-950"
-            onClick={handleDeleteOrLeave}
-            disabled={game.player1._id === user._id && game.player2}
-          >
-            {deleteOrLeaveText()}
-          </Button>
-        </div>
+        {(user._id === game.player1._id || user._id === game.player2?._id) && (
+          <div className="absolute top-10 left-1/2 -translate-x-1/2">
+            <Button
+              bgColor="bg-red-950"
+              onClick={handleDeleteOrLeave}
+              disabled={game.player1._id === user._id && game.player2}
+            >
+              {deleteOrLeaveText()}
+            </Button>
+          </div>
+        )}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col gap-4">
           <Button
             bgColor="bg-pink-800"
