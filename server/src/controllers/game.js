@@ -4,6 +4,20 @@ import GameModel from '../models/game.js';
 import MessageModel from '../models/message.js';
 import PlayerModel from '../models/player.js';
 
+export const getGames = async (req, res) => {
+  try {
+    const games = await GameModel.find({
+      player2: { $exists: false },
+    }).populate('player1', '_id username');
+
+    res.send({
+      games,
+    });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
 export const getGame = async (req, res) => {
   const { id } = req.params;
 
@@ -97,6 +111,12 @@ export const joinGame = async (req, res) => {
     const game = await GameModel.findById(id);
 
     if (!game) throw createHttpError(404, 'Game not found');
+
+    if (
+      game.player1.toString() === playerId ||
+      game.player2?.toString() === playerId
+    )
+      throw createHttpError(400, 'You are already in this game');
 
     if (game.player2) throw createHttpError(400, 'Game is full');
 
