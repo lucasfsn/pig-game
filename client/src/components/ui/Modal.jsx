@@ -24,7 +24,7 @@ function Open({ children, opens: opensWindowName }) {
   return cloneElement(children, { onClick: () => open(opensWindowName) });
 }
 
-function Window({ children, name }) {
+function Window({ children, name, bgColor = 'bg-gray-700' }) {
   const { openName, close } = useContext(ModalContext);
 
   const { ref } = useOutsideClick(close);
@@ -35,11 +35,11 @@ function Window({ children, name }) {
     <div className="fixed top-0 left-0 w-full h-screen backdrop-blur-sm z-50 transition-all">
       <div
         ref={ref}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-700 shadow-2xl rounded-lg py-12 px-14 transition-all"
+        className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-2xl rounded-lg py-12 px-14 transition-all ${bgColor}`}
       >
         <button
           onClick={close}
-          className="text-3xl bg-none border-none p-2 rounded-full translate-x-3 transition-all absolute top-1 right-4"
+          className="text-3xl bg-none border-none p-2 rounded-full translate-x-3 transition-all absolute top-1 right-4 text-white"
         >
           <HiXMark />
         </button>

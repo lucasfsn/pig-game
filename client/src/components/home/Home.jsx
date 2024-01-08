@@ -59,7 +59,7 @@ function Home() {
                 Find game
               </Button>
             </Modal.Open>
-            <Modal.Window name="games">
+            <Modal.Window name="games" bgColor="bg-gray-900">
               <BrowseGames />
             </Modal.Window>
           </Modal>
