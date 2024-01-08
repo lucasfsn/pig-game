@@ -44,6 +44,9 @@ function App() {
           error: {
             duration: 5000,
           },
+          custom: {
+            duration: 15000,
+          },
           style: {
             fontSize: '16px',
             maxWidth: '500px',
