@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { mqttPublish } from '../../helpers/mqttPublish.js';
 import { useMqttSubscribe } from '../../hooks/useMqttSubscribe.js';
 import Button from '../ui/Button.jsx';
 import Spinner from '../ui/Spinner.jsx';
@@ -117,11 +116,7 @@ function Game() {
   ]);
 
   async function handleJoinGame() {
-    await joinGame(game._id, user._id);
-    mqttPublish(
-      `game/${game._id}/join`,
-      JSON.stringify({ gameId: game._id, user })
-    );
+    await joinGame(game._id, user);
   }
 
   if (!game) return <Spinner />;

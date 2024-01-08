@@ -21,6 +21,18 @@ export async function createGameApi(playerId) {
   return data;
 }
 
+export async function getGamesApi() {
+  const token = Cookies.get('token');
+
+  const { data } = await axios.get(`${apiUrl}/game/all`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return data;
+}
+
 export async function joinGameApi(gameId, playerId) {
   const token = Cookies.get('token');
 

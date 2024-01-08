@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { mqttPublish } from '../../helpers/mqttPublish.js';
 import { useGame } from '../game/useGame.js';
 import Button from '../ui/Button.jsx';
+import Modal from '../ui/Modal.jsx';
 import { getUser } from '../user/userSlice.js';
+import BrowseGames from './BrowseGames.jsx';
 
 function Home() {
   const [gameId, setGameId] = useState('');
@@ -18,8 +19,7 @@ function Home() {
   }
 
   async function handleJoinGame() {
-    await joinGame(gameId, user._id);
-    mqttPublish(`game/${gameId}/join`, JSON.stringify({ gameId, user }));
+    await joinGame(gameId, user);
   }
 
   return (
@@ -49,9 +49,21 @@ function Home() {
         </div>
       </div>
       <div className="flex flex-col items-center gap-8">
-        <Button bgColor="bg-pink-900" onClick={handleCreateGame}>
-          Create New Game
-        </Button>
+        <div className="flex gap-2">
+          <Button bgColor="bg-pink-900" onClick={handleCreateGame}>
+            Create New Game
+          </Button>
+          <Modal>
+            <Modal.Open opens="games">
+              <Button bgColor="bg-gray-400" textColor="text-black">
+                Find game
+              </Button>
+            </Modal.Open>
+            <Modal.Window name="games">
+              <BrowseGames />
+            </Modal.Window>
+          </Modal>
+        </div>
         <div className="flex flex-col gap-2">
           <input
             type="text"
